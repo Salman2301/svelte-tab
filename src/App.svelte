@@ -1,7 +1,7 @@
 <script>
 	import Tab from "./Tab.svelte";
-	import Sample from "./Sample.svelte";
+	import Component from "./Sample.svelte";
 </script>
 
 
-<Tab component={Sample} label="Tab" />
+<Tab component={Component} label="Tab" />

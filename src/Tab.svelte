@@ -2,8 +2,8 @@
 	import {onMount} from "svelte";
 	
 	export let component;
+	export let currTab;
 	export let label;
-	let currTab;
 	
 	export let tabs = [];
 	
@@ -33,42 +33,42 @@
 		currTab= newID;
 	}
 	const handleDelClick = id => {
-		if(tabs.length===1) {
+        if(tabs.length===1) {
 			console.log("one tab left, can't delete");
 			return;
-		}
-		if(currTab === id) {
+        }
+        if(currTab === id) {
 			// current tab is deleted, go back to previous tab
 			let ids = tabs.map(el=>el.id);
 			let pos = ids.indexOf(id);
 			currTab = tabs[pos-1].id;
 		}
 		tabs = tabs.filter((el)=>el.id!==id);
-		
 	}
 	
 </script>
+<div class="tabs">
+    <div class="tab-header">
+        {#each tabs as tab, i}
+            <div class="btn-tab" class:selected={tab.id===currTab} on:click={()=>{currTab=tab.id}}>
+                <p class="btn-tab-label">
+                    {label} {i+1}
+                </p>
+                <button class="btn-tab-del" on:click={()=>{handleDelClick(tab.id)}}>x</button>
+            </div>
+        {/each}
+            <div class="btn-tab-add" on:click={()=>{handleAddClick()}}>
+                <button class="btn-tab add">+</button>
+            </div>
+    </div>
 
-<div class="tab-header">
-	{#each tabs as tab, i}
-		<div class="btn-tab" class:selected={tab.id===currTab} on:click={()=>{currTab=tab.id}}>
-			<p class="btn-tab-label">
-				{label} {i+1}
-			</p>
-			<button class="btn-tab-del" on:click={()=>{handleDelClick(tab.id)}}>x</button>
-		</div>
-	{/each}
-		<div class="btn-tab-add" on:click={()=>{handleAddClick()}}>
-			<button class="btn-tab add">+</button>
-		</div>
+    {#each tabs as tab}
+        <div class="tabs-body" class:selected={tab.id===currTab}>
+            <svelte:component this={component} id={tab.id}/>
+        </div>
+    {/each}
+
 </div>
-
-{#each tabs as tab}
-<div class="tabs" class:selected={tab.id===currTab}>
-	<svelte:component this={component} id={tab.id}/>
-</div>
-{/each}
-
 <style>
 	.tab-header {
 		display: flex;
@@ -132,11 +132,17 @@
 	.btn-tab-add > button:hover{
 		background-color:white;
 	}
-	.tabs {
+	.tabs-body {
 		display:none;
 		position: relative;
 		margin-top: 50px; 
-	}
+    }
+    .tabs {
+        position: absolute;
+		margin: 0px;
+        padding: 0px;
+        width: 100%;
+    }
 	.selected {
 		display: block;
 	}
