@@ -62,7 +62,7 @@
             </div>
     </div>
 
-    {#each tabs as tab}
+    {#each tabs as tab(tab.id)}
         <div class="tabs-body" class:selected={tab.id===currTab}>
             <svelte:component this={component} id={tab.id}/>
         </div>
